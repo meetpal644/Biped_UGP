@@ -1,0 +1,90 @@
+<mujoco model="inverted_double_pendulum">
+
+    <compiler angle="radian" inertiafromgeom="true"/>
+
+    <option timestep="0.0001" gravity="0 0 -9.81" integrator="RK4"/>
+
+    <default>
+        <joint damping="0.001" frictionloss="0.0"/>
+        <motor ctrllimited="true" ctrlrange="-10 10"/>
+    </default>
+
+    <worldbody>
+        <body name="base" pos="0 0 0">
+            <geom type="plane" size="1 1 0.01" rgba="0 0 1 1"/>
+
+            <body name="pendulum" pos="0 0 0">
+
+                <!-- Pendulum joint (theta) -->
+                <joint name="theta"
+                       type="hinge"
+                       axis="0 1 0"
+                       pos="0 0 0"/>
+
+                <!-- Pendulum rod -->
+                <geom name="rod"
+                      type="capsule"
+                      fromto="0 0 0 0 0 1"
+                      size="0.04"
+                      rgba="0.2 0.3 0.9 1"
+                      mass="1"/>
+
+                <!-- Reaction wheel body -->
+                <body name="wheel" pos="0 -0.04 1">
+
+                    <!-- Wheel joint (phi) -->
+                    <joint name="phi"
+                           type="hinge"
+                           axis="0 1 0"/>
+
+                    <!-- Reaction wheel disk -->
+                    <geom name="wheel_geom"
+                          type="cylinder"
+                          size="0.25 0.002"
+                          rgba="1 0 0 1"
+                          euler="-1.57079 0 0"
+                          mass="2"/>
+
+                    <!-- Massless visual marker to show rotation -->
+                    <geom name="wheel_marker"
+                          type="capsule"
+                          fromto="0 0 0  0.25 0 0"
+                          size="0.01"
+                          rgba="0 1 0 1"
+                          density="0"/>
+                </body>
+
+            </body>
+        </body>
+    </worldbody>
+
+    <!-- Actuation: wheel only -->
+    <actuator>
+        <motor name="wheel_motor"
+               joint="phi"
+               gear="1"/>
+    </actuator>
+
+    <!-- Sensors -->
+    <sensor>
+        <jointpos joint="theta"/>
+        <jointvel joint="theta"/>
+        <jointvel joint="phi"/>
+    </sensor>
+
+    <!-- Initial conditions -->
+    <keyframe>
+        <key name="small"
+             qpos="0.05 0.0"
+             qvel="0.0 0.0"/>
+
+        <key name="medium"
+             qpos="0.15 0.0"
+             qvel="0.0 0.0"/>
+
+        <key name="large"
+             qpos="0.5 0.0"
+             qvel="0.0 0.0"/>
+    </keyframe>
+
+</mujoco>

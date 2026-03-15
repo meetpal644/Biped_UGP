@@ -1,0 +1,7 @@
+__pycache__/
+*.mov
+*.pdf
+.env
+models*
+logs*
+venv/
