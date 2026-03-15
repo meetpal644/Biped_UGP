@@ -1,0 +1,115 @@
+<mujoco model="upkie">
+  <compiler angle="radian"/>
+  
+  <option integrator = "RK4" timestep = "0.002" 
+          jacobian = "dense" cone = "elliptic" impratio = "1" 
+          solver = "Newton">
+    <!-- <flag energy="enable" fwdinv="enable" /> -->
+  </option>
+
+  <statistic meansize="0.05"/>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.6 0.6 0.6" rgb2="0 0 0" width="512" height="512"/>
+    <texture name="texplane" type="2d" builtin="checker" rgb1=".25 .25 .25" rgb2=".3 .3 .3" width="512" height="512" mark="cross" markrgb=".8 .8 .8"/>
+    <material name="matplane" reflectance="0.3" texture="texplane" texrepeat="1 1" texuniform="true"/>
+  </asset>
+
+  <default>
+    <!-- Collisions disabled for all geometries by default  -->
+    <geom conaffinity="1" contype="1"/>
+  </default>
+
+  <worldbody>
+    <geom name="floor" pos="0 0 0" size="5 5 0.1" type="plane" material="matplane" conaffinity="1" contype="1"/>
+    <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="5 0 0" dir="-1 0 0"/>
+    <light directional="true" diffuse=".8 .8 .8" specular=".2 .2 .2" pos="0 0 5" dir="0 0 -1"/>
+
+  <body name="torso" pos="0 0 0.55">
+    <freejoint/>
+    <geom size="0.0625 0.085 0.125" pos="0 0 -0.1" type="box" rgba="0.93 0.64 0.52 0.8"/>
+    <geom size="0.065 0.037 0.0275" pos="-0.04 0 -0.1" quat="0.5 0.5 0.5 0.5" type="box" rgba="0.3 0.3 0.3 1"/>
+    <geom size="0.06 0.035 0.02" pos="0 0 0.045" quat="0.707107 0 0 -0.707107" type="box" rgba="0.93 0.64 0.52 1"/>
+    <geom size="0.05 0.015" pos="0 0.1 -0.164" quat="0.707107 -0.707107 0 0" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+    <geom size="0.05 0.015" pos="0 -0.1 -0.164" quat="0 0 0.707107 -0.707107" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+    
+    <body name="left_hip_qdd100_rotor" pos="0 0.1142 -0.164" quat="0.707107 -0.707107 0 0">
+      <inertial pos="-0.133716 -0.0493719 0.0140513" quat="-0.224415 0.673782 0.163439 0.684795" mass="0.69241" diaginertia="0.00464877 0.00428201 0.000631583"/>
+      <joint name="left_hip" pos="0 0 0" axis="0 0 -1" range="-1.26 1.26" actuatorfrcrange="-16 16"/>
+      <geom size="0.023 0.0025" pos="0 0 -0.0025" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+      <geom size="0.025 0.045" pos="0 0 0.025" quat="0.5 -0.5 0.5 0.5" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+      <geom size="0.012 0.13" pos="0 0.07 0.025" quat="0.707107 0.707107 0 0" type="cylinder" rgba="1 0.77 0.48 1"/>
+      <geom size="0.05 0.03" pos="0 0.168 0.037" quat="0 0.707107 0.707107 0" type="cylinder" rgba="0.93 0.64 0.52 1"/>
+      <geom size="0.05 0.015" pos="0 0.168 0.082" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+    
+      <body name="left_knee_qdd100_rotor" pos="0 0.168 0.0962">
+        <inertial pos="-0.0784906 -0.0275374 0.0164405" quat="0.27403 0.627221 -0.286553 0.670365" mass="0.3954" diaginertia="0.00607838 0.00419453 0.00206971"/>
+        <joint name="left_knee" pos="0 0 0" axis="0 0 -1" range="-2.51 2.51" actuatorfrcrange="-16 16"/>
+        <geom size="0.023 0.0025" pos="0 0 -0.0025" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+        <geom size="0.025 0.045" pos="0 0 0.025" quat="0.5 -0.5 0.5 0.5" type="cylinder" rgba="0.93 0.64 0.52 1"/>
+        <geom size="0.012 0.13" pos="0 0.07 0.025" quat="0 0 0.707107 -0.707107" type="cylinder" rgba="1 0.77 0.48 1"/>
+        <!-- venky edits -->
+        <geom size="0.04 0.03 0.02" pos="0 0.173 0.0185" quat="0 0 0 -1" type="box" rgba="0.65 0.76 0.91 1"/>
+        <geom size="0.045 0.023 0.002" pos="0 0.175 -0.0105" quat="0 0 0 -1" type="box" rgba="0.8 0.8 0.8 1"/>
+        <geom size="0.03 0.009" pos="0 0.175 -0.022" quat="0 0 -1 0" type="cylinder" rgba="0.22 0.22 0.25 1"/>
+    
+        <body name="left_ankle_mj5208_rotor" pos="0 0.175 -0.012" quat="0 0 -1 0">
+          <inertial pos="0 -0.0276426 0.0076375" quat="0.44994 0.545485 -0.545485 0.44994" mass="0.18455" diaginertia="0.000251776 0.000187248 0.000107836"/>
+          <joint name="left_wheel" pos="0 0 0" axis="0 0 -1" actuatorfrcrange="-1.7 1.7"/>
+          <geom size="0.034 0.008" pos="0 0 0.015" type="cylinder" rgba="0.5 0.55 0.6 1"/>
+          <geom size="0.039 0.0125" pos="0 0 0.0376" type="cylinder" rgba="0.93 0.64 0.52 1"/>
+          <geom size="0.05 0.02" pos="0 0 0.046" type="cylinder" rgba="0.3 0.3 0.3 1" conaffinity="1" contype="1"/>
+        </body>
+      </body>
+    </body>
+    
+    <body name="right_hip_qdd100_rotor" pos="0 -0.1142 -0.164" quat="0 0 0.707107 -0.707107">
+      <inertial pos="-0.133716 -0.0493719 0.0140513" quat="-0.224415 0.673782 0.163439 0.684795" mass="0.69241" diaginertia="0.00464877 0.00428201 0.000631583"/>
+      <joint name="right_hip" pos="0 0 0" axis="0 0 -1" range="-1.26 1.26" actuatorfrcrange="-16 16"/>
+      <geom size="0.023 0.0025" pos="0 0 -0.0025" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+      <geom size="0.025 0.045" pos="0 0 0.025" quat="0.5 -0.5 0.5 0.5" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+      <geom size="0.012 0.13" pos="0 0.07 0.025" quat="0.707107 0.707107 0 0" type="cylinder" rgba="1 0.77 0.48 1"/>
+      <geom size="0.05 0.03" pos="0 0.168 0.037" quat="0 0.707107 0.707107 0" type="cylinder" rgba="0.93 0.64 0.52 1"/>
+      <geom size="0.05 0.015" pos="0 0.168 0.082" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+    
+      <body name="right_knee_qdd100_rotor" pos="0 0.168 0.0962">
+        <inertial pos="-0.0784906 -0.0275374 0.0164456" quat="0.273937 0.627211 -0.286636 0.670376" mass="0.3954" diaginertia="0.00607839 0.00419418 0.00206942"/>
+        <joint name="right_knee" pos="0 0 0" axis="0 0 -1" range="-2.51 2.51" actuatorfrcrange="-16 16"/>
+        <geom size="0.023 0.0025" pos="0 0 -0.0025" type="cylinder" rgba="0.1 0.1 0.1 1"/>
+        <geom size="0.025 0.045" pos="0 0 0.025" quat="0.5 -0.5 0.5 0.5" type="cylinder" rgba="0.93 0.64 0.52 1"/>
+        <geom size="0.012 0.13" pos="0 0.07 0.025" quat="0 0 0.707107 -0.707107" type="cylinder" rgba="1 0.77 0.48 1"/>
+        <!-- venky edits -->
+        <geom size="0.04 0.03 0.02" pos="0 0.173 0.0185" quat="0 0 0 -1" type="box" rgba="0.65 0.76 0.91 1"/>
+        <geom size="0.045 0.023 0.002" pos="0 0.175 -0.0105" quat="0 0 0 -1" type="box" rgba="0.8 0.8 0.8 1"/>
+        <geom size="0.03 0.009" pos="0 0.175 -0.022" quat="0 0 -1 0" type="cylinder" rgba="0.22 0.22 0.25 1"/>
+    
+        <body name="right_ankle_mj5208_rotor" pos="0 0.175 -0.012" quat="0 0 -1 0">
+          <inertial pos="0 -0.0276426 0.0076375" quat="0.44994 0.545485 -0.545485 0.44994" mass="0.18455" diaginertia="0.000251776 0.000187248 0.000107836"/>
+          <joint name="right_wheel" pos="0 0 0" axis="0 0 -1" actuatorfrcrange="-1.7 1.7"/>
+          <geom size="0.034 0.008" pos="0 0 0.015" type="cylinder" rgba="0.5 0.55 0.6 1"/>
+          <geom size="0.039 0.0125" pos="0 0 0.0376" type="cylinder" rgba="0.93 0.64 0.52 1"/>
+          <geom size="0.05 0.02" pos="0 0 0.046" type="cylinder" rgba="0.3 0.3 0.3 1" conaffinity="1" contype="1"/>
+        </body>
+      </body>
+    </body>
+  </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="left_hip_motor" joint="left_hip"/>
+    <motor name="right_hip_motor" joint="right_hip"/>
+    <motor name="left_knee_motor" joint="left_knee"/>
+    <motor name="right_knee_motor" joint="right_knee"/>
+    <motor name="left_wheel_motor" joint="left_wheel"/>
+    <motor name="right_wheel_motor" joint="right_wheel"/>
+  </actuator>
+
+  <keyframe>
+    <key name="nominal"
+    time="0"
+    qpos="0 0 0.55 1 0 0 0 0 0 0 0 0 0"
+    qvel="0 0 0 0 0 0 0 0 0 0 0 0"
+    ctrl="0 0 0 0 0 0"/>
+  </keyframe>
+
+</mujoco>
